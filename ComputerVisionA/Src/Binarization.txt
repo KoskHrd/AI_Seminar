@@ -1,0 +1,55 @@
+# Computer vision 
+# Binarization
+
+import cv2
+
+#----------Setting----------#
+#Setting for using google drive
+from google import colab
+colab.drive.mount('/content/gdrive')
+
+#Directory setting
+b_dir='gdrive/My Drive/ComputerVisionA/' # Setting working directory
+
+#Input fie setting
+t_dir=b_dir+'Images/'
+data='HRC'
+ext='.jpg'
+org_name=t_dir+data+ext
+
+#General settiong
+max_v=255
+
+#Experimental setting
+b_thr=127
+block_size=15
+c_val=10
+
+
+
+#Read source image
+img = cv2.imread(org_name,cv2.IMREAD_GRAYSCALE)
+if img is None:
+  print('\n*********************************************************************\n')
+  print(org_name+' cannot be read\n')
+  print('*********************************************************************\n')
+else:
+  #Binarization with threshold
+  ret,thresh1 = cv2.threshold(img,b_thr,max_v,cv2.THRESH_BINARY)
+  out_name=t_dir+data+'Binary_'+str(b_thr)+ext
+  cv2.imwrite(out_name,thresh1)
+
+  #Binarization with Otsu's method
+  ret2,OT1 = cv2.threshold(img,b_thr,max_v,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+  out_name=t_dir+data+'Otsu_'+str(ret2)+ext
+  cv2.imwrite(out_name,OT1)
+  print('Threshold of Otsu method: '+str(ret2))
+ 
+  #Adaptive thresholding 
+  AD1 = cv2.adaptiveThreshold(img,max_v,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,block_size,c_val)
+  out_name=t_dir+data+'ATMean_block'+str(block_size)+'_c'+str(c_val)+ext
+  cv2.imwrite(out_name,AD1)
+  
+  AD2 = cv2.adaptiveThreshold(img,max_v,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,block_size,c_val)
+  out_name=t_dir+data+'ATGauss_block'+str(block_size)+'_c'+str(c_val)+ext
+  cv2.imwrite(out_name,AD2)

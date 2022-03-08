@@ -1,0 +1,43 @@
+# Edge detection with Canny operator
+import cv2
+
+#----------Setting----------#
+#Setting for using google drive
+from google import colab
+colab.drive.mount('/content/gdrive')
+
+#Directory setting
+b_dir='gdrive/My Drive/ComputerVisionA/' # Setting working directory
+
+#Experimental setting (Parameter setting for canny operator)
+min_val=100
+max_val=150
+
+#Input fie setting
+t_dir=b_dir+'Images/'
+data='ISIR'
+ext='.png'
+org_name=t_dir+data+ext
+
+#Output file setting
+canny_name=t_dir+data+'_Canny_'+str(min_val)+'_'+str(max_val)+ext
+
+
+#----------Image processing----------#
+
+#Image read
+org=cv2.imread(org_name)
+if org is None:
+  print('\n*********************************************************************\n')
+  print(org_name+' cannot be read\n')
+  print('*********************************************************************\n')
+else:
+  #Grayscale image generation
+  gray=cv2.cvtColor(org,cv2.COLOR_BGR2GRAY)
+
+  #Apply canny operator
+  canny=cv2.Canny(gray,min_val,max_val)
+
+  #Save image
+  cv2.imwrite(canny_name,canny)
+
